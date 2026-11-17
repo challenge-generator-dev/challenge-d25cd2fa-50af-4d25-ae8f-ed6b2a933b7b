@@ -1,0 +1,55 @@
+@if (orderEvent) {
+  <div class="order-status" [ngClass]="statusClass()">
+    <div class="order-status__header">
+      <span class="order-status__id">Orden #{{ shortOrderId() }}</span>
+      <span class="order-status__badge" [ngClass]="statusClass()">
+        {{ displayStatus() }}
+      </span>
+    </div>
+    
+    <div class="order-status__details">
+      <div class="order-status__detail">
+        <span class="order-status__label">ID Completo:</span>
+        <span class="order-status__value order-status__value--id">{{ orderEvent.orderId }}</span>
+      </div>
+      
+      <div class="order-status__detail">
+        <span class="order-status__label">Evento ID:</span>
+        <span class="order-status__value">{{ orderEvent.id }}</span>
+      </div>
+      
+      <div class="order-status__detail">
+        <span class="order-status__label">Fecha:</span>
+        <span class="order-status__value">{{ formattedTimestamp() }}</span>
+      </div>
+    </div>
+    
+    <div class="order-status__indicators">
+      @if (isActive()) {
+        <span class="order-status__indicator order-status__indicator--active">
+          <span class="order-status__pulse"></span>
+          En progreso
+        </span>
+      }
+      
+      @if (isCompleted()) {
+        <span class="order-status__indicator order-status__indicator--completed">
+          ✓ Completada
+        </span>
+      }
+      
+      @if (isCancelled()) {
+        <span class="order-status__indicator order-status__indicator--cancelled">
+          ✗ Cancelada
+        </span>
+      }
+    </div>
+  </div>
+} @else {
+  <div class="order-status order-status--empty">
+    <div class="order-status__empty-message">
+      <span class="order-status__empty-icon">📦</span>
+      <span>No hay información de orden disponible</span>
+    </div>
+  </div>
+}

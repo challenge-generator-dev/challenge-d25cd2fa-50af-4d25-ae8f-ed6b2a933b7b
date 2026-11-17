@@ -1,0 +1,78 @@
+<div class="orders-container">
+  <header class="orders-header">
+    <h1 class="orders-header__title">Eventos de Órdenes</h1>
+    <div class="orders-header__status">
+      <span 
+        class="orders-header__indicator"
+        [class.orders-header__indicator--connected]="this.isConnected()"
+        [class.orders-header__indicator--disconnected]="!this.isConnected()">
+      </span>
+      <span class="orders-header__status-text">
+        {{ this.isConnected() ? 'Conectado' : 'Desconectado' }}
+      </span>
+    </div>
+  </header>
+
+  <section class="orders-actions">
+    <button 
+      type="button" 
+      class="orders-actions__button orders-actions__button--clear"
+      (click)="clearEvents()"
+      [disabled]="this.events().length === 0">
+      Limpiar Eventos
+    </button>
+  </section>
+
+  <section class="orders-last-event" *ngIf="this.lastEvent()">
+    <h2 class="orders-last-event__title">Último Evento</h2>
+    <div class="orders-last-event__card">
+      <div class="orders-last-event__field">
+        <span class="orders-last-event__label">ID:</span>
+        <span class="orders-last-event__value">{{ this.lastEvent()?.id }}</span>
+      </div>
+      <div class="orders-last-event__field">
+        <span class="orders-last-event__label">Orden:</span>
+        <span class="orders-last-event__value">{{ this.lastEvent()?.orderId }}</span>
+      </div>
+      <div class="orders-last-event__field">
+        <span class="orders-last-event__label">Estado:</span>
+        <span class="orders-last-event__value orders-last-event__value--status">
+          {{ this.lastEvent()?.status }}
+        </span>
+      </div>
+      <div class="orders-last-event__field">
+        <span class="orders-last-event__label">Timestamp:</span>
+        <span class="orders-last-event__value">{{ this.lastEvent()?.timestamp | date:'medium' }}</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="orders-list">
+    <h2 class="orders-list__title">
+      Historial de Eventos 
+      <span class="orders-list__count">({{ this.events().length }})</span>
+    </h2>
+    
+    <div class="orders-list__empty" *ngIf="this.events().length === 0">
+      <p class="orders-list__empty-text">No hay eventos recibidos</p>
+      <p class="orders-list__empty-hint">Conectando al servidor de eventos...</p>
+    </div>
+
+    <ul class="orders-list__items" *ngIf="this.events().length > 0">
+      <li 
+        class="orders-list__item" 
+        *ngFor="let event of this.events(); trackBy: trackByEventId">
+        <div class="orders-list__item-content">
+          <div class="orders-list__item-header">
+            <span class="orders-list__item-id">{{ event.orderId }}</span>
+            <span class="orders-list__item-status">{{ event.status }}</span>
+          </div>
+          <div class="orders-list__item-meta">
+            <span class="orders-list__item-timestamp">{{ event.timestamp | date:'short' }}</span>
+            <span class="orders-list__item-event-id">{{ event.id }}</span>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </section>
+</div>
